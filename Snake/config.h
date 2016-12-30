@@ -8,7 +8,8 @@
 #define MENU_END		7
 #define MENU_X			15
 
-#define WALL			0xDB
-#define SNAKE			0xFE
+#define WALL			0xB2
+#define SNAKE			0xDB
 #define APPLE			0x40
 #define MENUSELECT		0xAF
+#define BACKGROUND		0xB0

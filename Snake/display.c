@@ -40,8 +40,10 @@ void newGame(Game *game)
 	{
 		for (j = 0; j <= BOARD_HEIGHT; j++)
 		{
-			if (i < 2 || i > BOARD_WIDTH-2 || j == 0 || j == BOARD_HEIGHT)
+			if (i < 2 || i > BOARD_WIDTH - 2 || j == 0 || j == BOARD_HEIGHT)
 				putCharXY(i, j, WALL);
+			else
+				putCharXY(i, j, BACKGROUND);
 		}
 	}
 	game->headX = BOARD_WIDTH / 2;
@@ -60,7 +62,7 @@ void drawBoard(Game *game)
 	{
 		for (j = 1; j <= BOARD_HEIGHT - 1; j++)
 		{
-			putCharXY(i, j, 32);
+			putCharXY(i, j, BACKGROUND);
 		}
 	}
 	putCharXY(game->headX, game->headY, SNAKE);

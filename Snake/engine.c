@@ -48,57 +48,24 @@ void engine(Game *game)
 	newGame(game);
 	while (1)
 	{
-		do
-		{
-			key = getKey();
-			if (move(key, game) == 1)
-			{
-				drawBoard(game);
-			}
-		} while (move(key,game) == 1);
+		
 	}
 }
 
 int move(char key, Game *game)
 {
-	if (key == LEFT_ARROW)
+	if (key == 'q')
 	{
-		if (game->headX > 2)
-		{
-			game->headX--;
-			return 1;
-		}
-	}
-	else if (key == RIGHT_ARROW)
-	{
-		if (game->headX < BOARD_WIDTH-2)
-		{
-			game->headX++;
-			return 1;
-		}
-	}
-	else if (key == UP_ARROW)
-	{
-		if (game->headY > 1)
-		{
-			game->headY--;
-			return 1;
-		}
-	}
-	else if (key == DOWN_ARROW)
-	{
-		if (game->headY < BOARD_HEIGHT-1)
-		{
-			game->headY++;
-			return 1;
-		}
-	}
-	else if (key == 'q')
-	{
-		// END
+		finish(game);
 	}
 	else if (key == 'r')
 	{
-		// RESTART
+		newGame(game);
 	}
+}
+
+int finish(Game *game)
+{
+	clearScreen();
+	putStringXY(1, 2, "KONIEC GRY!");
 }
