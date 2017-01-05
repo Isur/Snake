@@ -21,10 +21,10 @@
     <ClCompile Include="console.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="engine.c">
+    <ClCompile Include="display.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="display.c">
+    <ClCompile Include="engine.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

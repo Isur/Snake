@@ -1,9 +1,4 @@
 #include "engine.h"
-#define UP_ARROW 72
-#define DOWN_ARROW 80
-#define LEFT_ARROW 75
-#define RIGHT_ARROW	77
-#define ENTER 13
 
 void menuControl(Game *game)
 {
@@ -11,61 +6,98 @@ void menuControl(Game *game)
 	while (1)
 	{
 		key = getKey();
-		if (key == UP_ARROW && game->menuSelectY > 5)
+		if (key == UP_ARROW)
 		{
-			game->menuSelectY--;
-			displayMenuSelectIcon(game);
+			if (game->menuSelectY > MENU_START)
+			{
+				game->menuSelectY--;
+			}
 		}
-		else if (key == DOWN_ARROW && game->menuSelectY < 7)
+		else if (key == DOWN_ARROW)
 		{
-			game->menuSelectY++;
-			displayMenuSelectIcon(game);
+			if (game->menuSelectY < MENU_END)
+			{
+				game->menuSelectY++;
+			}
 		}
-		else if(key == ENTER)
+		displayMenuSelectIcon(game);
+		if (key == ENTER)
 		{
 			switch (game->menuSelectY)
 			{
 			case (MENU_START):
-				putStringXY(MENU_X, MENU_END + 1, "Wybrales NOWA GRE! NACIŒNIJ COKOLWIEK ABY KONTYNUWAC!");
+				putStringXY(MENU_X, MENU_END + 1, "NEW GAME! CLICK SOMETHING TO CONTINUE");
 				getKey();
 				engine(game);
 				break;
 			case (MENU_START + 1):
-				putStringXY(MENU_X, MENU_END + 1, "Wybrales liste wynikow! NACIŒNIJ COKOLWIEK ABY KONTYNUWAC!");
+				putStringXY(MENU_X, MENU_END + 1, "SCORE LIST! CLICK SOMETHING TO CONTINUE");
 				break;
 			case (MENU_START + 2):
-				putStringXY(MENU_X, MENU_END + 1, "Wybrales KONIEC! Dziekuje za gre. NACIŒNIJ COKOLWIEK ABY KONTYNUWAC!");
+				putStringXY(MENU_X, MENU_END + 1, "EXIT! THANKS FOR PLAYING!");
 				break;
 			}
 			break;
 		}
 	}
 }
+
 void engine(Game *game)
 {
 	char key;
-	int changeDirection = 0;
+	char direction = 's';
+	int i = 0;
 	newGame(game);
-	while (1)
+	while (1) 
 	{
-		
+		if (kbhit())
+		{
+			key = getKey();
+			switch (key)
+			{
+			case 'w': direction = 'u'; break;
+			case 's': direction = 'd'; break;
+			case 'a': direction = 'l'; break;
+			case 'd': direction = 'r'; break;
+			case 'r': direction = 's'; newGame(game); break;
+			case 'q': finish(game); break;
+			default: break;
+			}
+		}
+		if (game->snakeX[0] == game->appleX && game->snakeY[0] == game->appleY)
+		{
+			game->snakeLength++;
+			drawApple(game);
+		}
+		for (i = game->snakeLength-1; i > 0; i--)
+		{
+			game->snakeX[i] = game->snakeX[i - 1];
+			game->snakeY[i] = game->snakeY[i - 1];
+		}
+		move(game, direction);
 	}
+
 }
 
-int move(char key, Game *game)
+void move(Game *game, char direction)
 {
-	if (key == 'q')
+	switch (direction)
 	{
-		finish(game);
+	case 'u': if (game->snakeY[0] == 1) finish(game); if (game->snakeY[0] > 1) game->snakeY[0]--; break;
+	case 'd': if (game->snakeY[0] == BOARD_HEIGHT - 1) finish(game); if (game->snakeY[0] < BOARD_HEIGHT - 1) game->snakeY[0]++; break;
+	case 'l': if (game->snakeX[0] == 1) finish(game); if (game->snakeX[0] > 1) game->snakeX[0]--; break;
+	case 'r': if (game->snakeX[0] == BOARD_WIDTH - 1) finish(game); if (game->snakeX[0] < BOARD_WIDTH - 1) game->snakeX[0]++; break;
+	case 's': break;
+	default: break;
 	}
-	else if (key == 'r')
-	{
-		newGame(game);
-	}
+	drawBoard(game);
+	Sleep(200);
 }
 
-int finish(Game *game)
+void finish(game)
 {
 	clearScreen();
-	putStringXY(1, 2, "KONIEC GRY!");
+	putStringXY(BOARD_WIDTH / 2, BOARD_HEIGHT / 2, "KONIEC GRY");
+	getKey();
+	exit(1);
 }

@@ -1,5 +1,9 @@
 #pragma once
-// only windows console functions:
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// windows console functions:
 
 void prepareScreen();
 void putCharXY(int x, int y, char character);

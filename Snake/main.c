@@ -1,9 +1,19 @@
-/********************************************
-*                                           *
-*     Copyright 2016 by Artur Bednarczyk    *
-*     Version: 0.0                          *
-*                                           *
-*********************************************/
+/*
+******************************************************
+*  *********	**    *	      *	      *  *   ******  *
+*  *			***   *  	 * *      * *    *       *
+*  *********	* **  *	    *****     **     ******  *
+*    	   *	*  ** *	   *     *    * *    *       *
+*  *********    *   ***   *       *   *  *   ******  *
+******************************************************
+****************************
+*                          *
+* MADE BY Artur Bednarczyk *
+* 2017 - Programowanie I   * 
+*                          *
+****************************
+*/
+
 #include "config.h"
 #include "engine.h"
 #include "console.h"
@@ -11,12 +21,13 @@
 
 main()
 {
-	Game game;
-
-	prepareScreen(&game);
-	displayMenu(&game);
+    Game game;
+    
+    prepareScreen();
+    displayMenu(&game);
 	menuControl(&game);
 
-	getKey();
-	return 0;
+
+
+    return 0;
 }

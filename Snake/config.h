@@ -1,15 +1,26 @@
 #pragma once
-// config, board size, symbols, menu position.
+// config file: size, symbols  
 
-#define BOARD_WIDTH		80
-#define BOARD_HEIGHT	25
+#define MENU_ARROW 0xAF
 
-#define MENU_START		5
-#define MENU_END		7
-#define MENU_X			15
+#define DOWN_WALL 0xDC
+#define UPPER_WALL 0xDF
+#define SIDE_WALL 0xDB
 
-#define WALL			0xB2
-#define SNAKE			0xDB
-#define APPLE			0x40
-#define MENUSELECT		0xAF
-#define BACKGROUND		0xB0
+#define APPLE '@' //0xB1
+#define BACKGROUND 0xB0
+#define SNAKE_BODY 0xB2
+
+#define BOARD_WIDTH 80
+#define BOARD_HEIGHT 25
+
+#define MENU_X 24
+#define MENU_START 11
+#define MENU_END 13
+
+#define UP_ARROW 72
+#define DOWN_ARROW 80
+#define LEFT_ARROW 75
+#define RIGHT_ARROW 77
+#define ENTER 13
+#define SPACE 32
