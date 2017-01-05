@@ -32,9 +32,12 @@ void menuControl(Game *game)
 				break;
 			case (MENU_START + 1):
 				putStringXY(MENU_X, MENU_END + 1, "SCORE LIST! CLICK SOMETHING TO CONTINUE");
+				getKey();
 				break;
 			case (MENU_START + 2):
 				putStringXY(MENU_X, MENU_END + 1, "EXIT! THANKS FOR PLAYING!");
+				getKey();
+				finish(game);
 				break;
 			}
 			break;
