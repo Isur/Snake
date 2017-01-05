@@ -58,10 +58,10 @@ void engine(Game *game)
 			key = getKey();
 			switch (key)
 			{
-			case 'w': direction = 'u'; break;
-			case 's': direction = 'd'; break;
-			case 'a': direction = 'l'; break;
-			case 'd': direction = 'r'; break;
+			case 'w': if (direction == 'd' && game->snakeLength > 1) finish(game); direction = 'u'; break;
+			case 's': if (direction == 'u' && game->snakeLength > 1) finish(game); direction = 'd'; break;
+			case 'a': if (direction == 'r' && game->snakeLength > 1) finish(game); direction = 'l'; break;
+			case 'd': if (direction == 'l' && game->snakeLength > 1) finish(game); direction = 'r'; break;
 			case 'r': direction = 's'; newGame(game); break;
 			case 'q': finish(game); break;
 			default: break;
@@ -72,7 +72,15 @@ void engine(Game *game)
 			game->snakeLength++;
 			drawApple(game);
 		}
-		for (i = game->snakeLength-1; i > 0; i--)
+
+		for (i = 1; i < game->snakeLength; i++)
+		{
+			if (game->snakeX[0] == game->snakeX[i] && game->snakeY[0] == game->snakeY[i])
+			{
+				finish(game);
+			}
+		}
+		for (i = game->snakeLength - 1; i > 0; i--)
 		{
 			game->snakeX[i] = game->snakeX[i - 1];
 			game->snakeY[i] = game->snakeY[i - 1];
