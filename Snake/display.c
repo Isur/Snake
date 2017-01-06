@@ -49,10 +49,9 @@ void newGame(Game *game)
 	int i = 0, j = 0;
 	clearScreen();
 	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);
-	
-	for (i = 0; i < BOARD_HEIGHT + 20; i++)
+	for (i = 0; i < BOARD_HEIGHT + 2; i++)
 	{
-		for (j = 0; j < 120; j++)
+		for (j = 0; j < BOARD_WIDTH + 30; j++)
 		{
 			putCharXY(j, i, 32);
 		}
@@ -69,6 +68,7 @@ void newGame(Game *game)
 		putCharXY(i, 0, DOWN_WALL);
 		putCharXY(i, BOARD_HEIGHT, UPPER_WALL);
 	}
+	color(BACKGROUND_COLOR, BACKGROUND_COLOR);
 	for (i = 1; i < BOARD_WIDTH; i++)
 	{
 		for (j = 1; j < BOARD_HEIGHT; j++)
@@ -76,6 +76,7 @@ void newGame(Game *game)
 			putCharXY(i, j, BACKGROUND);
 		}
 	}
+	color(DEFAULT_BACKGROUND_COLOR, WALL_COLOR);
 	for (i = BOARD_WIDTH + 1; i < BOARD_WIDTH + 24; i++)
 	{
 		putCharXY(i, 0, DOWN_WALL);
@@ -109,24 +110,19 @@ void newGame(Game *game)
 	game->snakeLength = 1;
 	color(BACKGROUND_COLOR, APPLE_COLOR);
 	drawApple(game);
-	//color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);
 }
 
 void drawBoard(Game *game)
 {
-	int i = 0, j = 0, k= 0;
+	int i = 0;
 	color(BACKGROUND_COLOR, BACKGROUND_COLOR);
-	for (i = 1; i < BOARD_WIDTH; i++)
-	{
-		for (j = 1; j < BOARD_HEIGHT; j++)
-		{
-			if (i == game->appleX && j == game->appleY);
-			else putCharXY(i, j, BACKGROUND);
-		}
-	}
+	putCharXY(game->snakeX[game->snakeLength], game->snakeY[game->snakeLength], BACKGROUND);
 	color(BACKGROUND_COLOR, HEAD_COLOR);
 	putCharXY(game->snakeX[0], game->snakeY[0], SNAKE_BODY);
-	color(1, BODY_COLOR);
+	color(BACKGROUND_COLOR, BODY_COLOR);
+	if (game->snakeLength > 1)putCharXY(game->snakeX[game->snakeLength-1], game->snakeY[game->snakeLength-1], SNAKE_BODY);
+
+	
 	for (i = 1; i < game->snakeLength; i++)
 	{
 		putCharXY(game->snakeX[i], game->snakeY[i], SNAKE_BODY);
@@ -136,8 +132,28 @@ void drawBoard(Game *game)
 
 void drawApple(Game *game)
 {
-	game->appleX = 1 + (int)(rand() / (RAND_MAX + 1.0) * (BOARD_WIDTH - 1));
-	game->appleY = 1 + (int)(rand() / (RAND_MAX + 1.0) * (BOARD_HEIGHT - 1));
+	srand(time(NULL));
+	int i = 0;
+	int error = 0;
+	
+	do 
+	{
+		game->appleX = 1 + (int)(rand() / (RAND_MAX + 1.0) * (BOARD_WIDTH - 1));
+		game->appleY = 1 + (int)(rand() / (RAND_MAX + 1.0) * (BOARD_HEIGHT - 1));
+		for (i; i < game->snakeLength; i++)
+		{
+			if (game->appleX == game->snakeX[i])
+			{
+				error = 1;
+				break;
+			}
+			else
+				error = 0;
+		}
+	} while (error == 1);
+		
+	
+
 	putCharXY(game->appleX, game->appleY, UNRIPE_APPLE);
 	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);
 	putCharXY(BOARD_WIDTH + 15, 2, ' ');
@@ -149,6 +165,6 @@ void drawFinish(Game *game)
 {
 	color(BACKGROUND_COLOR, HEAD_COLOR);
 	putStringXY((BOARD_WIDTH + 25) / 2 -5 , BOARD_HEIGHT / 2, "GAME OVER");
-	putStringXY((BOARD_WIDTH + 25) / 2 -5 , BOARD_HEIGHT / 2 + 1, "YOU EARN :");
+	putStringXY((BOARD_WIDTH + 25) / 2 -5 , BOARD_HEIGHT / 2 + 1, "SCORE :");
 	printf(" %d POINTS", game->snakeLength - 1);
 }

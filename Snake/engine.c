@@ -60,10 +60,10 @@ void engine(Game *game)
 			key = getKey();
 			switch (key)
 			{
-			case 'w': if (direction == 'd' && game->snakeLength > 1) finish(game); direction = 'u'; break;
-			case 's': if (direction == 'u' && game->snakeLength > 1) finish(game); direction = 'd'; break;
-			case 'a': if (direction == 'r' && game->snakeLength > 1) finish(game); direction = 'l'; break;
-			case 'd': if (direction == 'l' && game->snakeLength > 1) finish(game); direction = 'r'; break;
+			case 'w': if (direction != 'd' || game->snakeLength == 1)direction = 'u'; break;
+			case 's': if (direction != 'u' || game->snakeLength == 1)direction = 'd'; break;
+			case 'a': if (direction != 'r' || game->snakeLength == 1)direction = 'l'; break;
+			case 'd': if (direction != 'l' || game->snakeLength == 1)direction = 'r'; break;
 			case 'r': direction = 's'; newGame(game); break;
 			case 'q': finish(game); break;
 			default: break;
@@ -82,11 +82,12 @@ void engine(Game *game)
 				finish(game);
 			}
 		}
-		for (i = game->snakeLength - 1; i > 0; i--)
+		for (i = game->snakeLength; i > 0; i--)
 		{
 			game->snakeX[i] = game->snakeX[i - 1];
 			game->snakeY[i] = game->snakeY[i - 1];
 		}
+
 		move(game, direction);
 	}
 

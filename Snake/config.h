@@ -26,8 +26,8 @@
 #define ENTER 13
 #define SPACE 32
 
-#define BODY_COLOR 7 
-#define HEAD_COLOR 0
+#define BODY_COLOR 6
+#define HEAD_COLOR 1
 #define APPLE_COLOR 4
 #define BACKGROUND_COLOR 2
 #define WALL_COLOR 8
@@ -35,4 +35,4 @@
 #define DEFAULT_FOREGROUND_COLOR 2
 #define MENU_POINTER_COLOR 4
 
-#define SPEED 50
+#define SPEED 75
