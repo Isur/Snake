@@ -23,6 +23,7 @@ void menuControl(Game *game)
 		displayMenuSelectIcon(game);
 		if (key == ENTER)
 		{
+			game->menuSelectX = -1;
 			switch (game->menuSelectY)
 			{
 			case (MENU_START):
@@ -31,13 +32,14 @@ void menuControl(Game *game)
 				engine(game);
 				break;
 			case (MENU_START + 1):
-				putStringXY(MENU_X, MENU_END + 1, "SCORE LIST! CLICK SOMETHING TO CONTINUE");
-				getKey();
+				//putStringXY(MENU_X, MENU_END + 1, "SCORE LIST! CLICK SOMETHING TO CONTINUE");
+				//getKey();
+				menuControl(game);
 				break;
 			case (MENU_START + 2):
 				putStringXY(MENU_X, MENU_END + 1, "EXIT! THANKS FOR PLAYING!");
 				getKey();
-				finish(game);
+				exit(1);
 				break;
 			}
 			break;
@@ -102,13 +104,14 @@ void move(Game *game, char direction)
 	default: break;
 	}
 	drawBoard(game);
-	Sleep(200);
+	Sleep(SPEED);
 }
 
 void finish(game)
 {
 	clearScreen();
-	putStringXY(BOARD_WIDTH / 2, BOARD_HEIGHT / 2, "KONIEC GRY");
+	drawFinish(game);
 	getKey();
-	exit(1);
+	displayMenu(game);
+	menuControl(game);
 }

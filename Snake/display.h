@@ -25,3 +25,4 @@ void newGame(Game *game);
 void drawBoard(Game *game);
 void drawApple(Game *game);
 void theEnd(Game *game);
+void drawFinish(Game *game);
