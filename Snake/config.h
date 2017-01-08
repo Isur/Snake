@@ -8,9 +8,9 @@
 #define SIDE_WALL 0xDB
 
 #define UNRIPE_APPLE 0xDB //0xB1
-#define RIP_APPLE 0xDB //
-#define BACKGROUND 0xB0
-#define SNAKE_BODY 0xB2
+#define RIP_APPLE 0xDB 
+#define BACKGROUND 0xB2
+#define SNAKE_BODY 0xDB
 
 #define BOARD_WIDTH 80
 #define BOARD_HEIGHT 25
@@ -26,13 +26,12 @@
 #define ENTER 13
 #define SPACE 32
 
-#define BODY_COLOR 6
-#define HEAD_COLOR 1
+#define BODY_COLOR 7
+#define HEAD_COLOR 6
 #define APPLE_COLOR 4
+#define UNRIPE_APPLE_COLOR 1
 #define BACKGROUND_COLOR 2
 #define WALL_COLOR 8
 #define DEFAULT_BACKGROUND_COLOR 1
-#define DEFAULT_FOREGROUND_COLOR 2
+#define DEFAULT_FOREGROUND_COLOR 10
 #define MENU_POINTER_COLOR 4
-
-#define SPEED 75

@@ -16,6 +16,12 @@ typedef struct
     int snakeLength;
 	int snakePrevX;
 	int snakePrevY;
+	int speed;
+	int obstacle;
+	int obstacleX[(BOARD_HEIGHT*BOARD_WIDTH) / 4];
+	int obstacleY[(BOARD_HEIGHT*BOARD_WIDTH) / 4];
+	char nick[11];
+	int apple;
 }Game;
 
 void displayMenu(Game *game);
@@ -24,3 +30,6 @@ void newGame(Game *game);
 void drawBoard(Game *game);
 void drawApple(Game *game);
 void drawFinish(Game *game);
+void animationMenu(Game *game);
+void displayScore(Game *game);
+void ripening(Game *game);

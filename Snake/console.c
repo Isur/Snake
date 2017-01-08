@@ -23,6 +23,13 @@ void prepareScreen()
 void clearScreen()
 {
     system("CLS");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 2, "******************************************************");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 3, "*  *********	 **    *       *       *  *   ******    *");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 4, "*  *          ***   *      * *      * *    *         *");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 5, "*  *********	 * **  *     *****     **     ****      *");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 6, "*          *	 *  ** *    *     *    * *    *         *");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 7, "*  *********  *   ***   *       *   *  *   ******    *");
+	putStringXY((BOARD_WIDTH + 26) / 2 - 27, 8, "******************************************************");
 }
 
 
@@ -53,4 +60,9 @@ void color(int bgColor, int fgColor)
 	HANDLE hand;
 	hand = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hand, bgColor * 16 | fgColor);
+}
+
+void wait(int f)
+{
+	Sleep(f);
 }

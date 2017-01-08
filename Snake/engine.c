@@ -3,6 +3,7 @@
 void menuControl(Game *game)
 {
 	char key;
+	int speed = 0;
 	while (1)
 	{
 		key = getKey();
@@ -27,14 +28,42 @@ void menuControl(Game *game)
 			switch (game->menuSelectY)
 			{
 			case (MENU_START):
-				putStringXY(MENU_X, MENU_END + 1, "NEW GAME! CLICK SOMETHING TO CONTINUE");
-				getKey();
+				putStringXY(MENU_X, MENU_END + 1, "CHOOSE SPEED LEVLE[1-4]: ");
+				do
+				{
+					game->speed = getKey() - 48;
+				} while (game->speed < 1 || game->speed > 4);
+				printf("%d", game->speed);
+				switch (game->speed)
+				{
+				case 1: game->speed = 100; break;
+				case 2: game->speed = 75; break;
+				case 3: game->speed = 50; break;
+				case 4: game->speed = 25; break;
+				default: break;
+				}
+				putStringXY(MENU_X, MENU_END + 2, "CHOOSE OBSTACLE LEVLE[1-4]: ");
+				do
+				{
+					game->obstacle = getKey() - 48;
+				} while (game->obstacle < 1 || game->obstacle > 4);
+				printf("%d", game->obstacle);
+				switch (game->obstacle)
+				{
+				case 1: game->obstacle = 0; break;
+				case 2: game->obstacle = (int)BOARD_WIDTH*BOARD_HEIGHT / 256; break;
+				case 3: game->obstacle = (int)BOARD_WIDTH*BOARD_HEIGHT / 128; break;
+				case 4: game->obstacle = (int)BOARD_WIDTH*BOARD_HEIGHT / 64; break;
+				default: break;
+				}
+				putStringXY(MENU_X, MENU_END + 3, "NICK[max 10 chars]: ");
+				fgets(game->nick, 11, stdin);
+				game->nick[strlen(game->nick) - 1] = '\0';
+				wait(1000);
 				engine(game);
 				break;
 			case (MENU_START + 1):
-				//putStringXY(MENU_X, MENU_END + 1, "SCORE LIST! CLICK SOMETHING TO CONTINUE");
-				//getKey();
-				menuControl(game);
+				displayScore(game);
 				break;
 			case (MENU_START + 2):
 				putStringXY(MENU_X, MENU_END + 1, "EXIT! THANKS FOR PLAYING!");
@@ -49,6 +78,7 @@ void menuControl(Game *game)
 
 void engine(Game *game)
 {
+	srand(time(NULL));
 	char key;
 	char direction = 's';
 	int i = 0;
@@ -71,14 +101,20 @@ void engine(Game *game)
 		}
 		if (game->snakeX[0] == game->appleX && game->snakeY[0] == game->appleY)
 		{
-			game->snakeLength++;
-			drawApple(game);
+			if (game->apple == 0) finish(game);
+			else 
+			{
+				game->snakeLength++;
+				drawApple(game);
+			}
 		}
+
 
 		for (i = 1; i < game->snakeLength; i++)
 		{
 			if (game->snakeX[0] == game->snakeX[i] && game->snakeY[0] == game->snakeY[i])
 			{
+				wait(3 * 1000);
 				finish(game);
 			}
 		}
@@ -87,7 +123,12 @@ void engine(Game *game)
 			game->snakeX[i] = game->snakeX[i - 1];
 			game->snakeY[i] = game->snakeY[i - 1];
 		}
-
+		if (game->apple == 0)
+		{
+			i = random(0, 50);
+			if (i == 3) ripeningApple(game);
+			
+		}
 		move(game, direction);
 	}
 
@@ -95,24 +136,59 @@ void engine(Game *game)
 
 void move(Game *game, char direction)
 {
+	int i = 0;
 	switch (direction)
 	{
-	case 'u': if (game->snakeY[0] == 1) finish(game); if (game->snakeY[0] > 1) game->snakeY[0]--; break;
-	case 'd': if (game->snakeY[0] == BOARD_HEIGHT - 1) finish(game); if (game->snakeY[0] < BOARD_HEIGHT - 1) game->snakeY[0]++; break;
-	case 'l': if (game->snakeX[0] == 1) finish(game); if (game->snakeX[0] > 1) game->snakeX[0]--; break;
-	case 'r': if (game->snakeX[0] == BOARD_WIDTH - 1) finish(game); if (game->snakeX[0] < BOARD_WIDTH - 1) game->snakeX[0]++; break;
+	case 'u': if (game->snakeY[0] == 1) { wait(3 * 1000); finish(game); } if (game->snakeY[0] > 1) game->snakeY[0]--; break;
+	case 'd': if (game->snakeY[0] == BOARD_HEIGHT - 1) { wait(3 * 1000); finish(game); } if (game->snakeY[0] < BOARD_HEIGHT - 1) game->snakeY[0]++; break;
+	case 'l': if (game->snakeX[0] == 1) { wait(3 * 1000); finish(game); }; if (game->snakeX[0] > 1) game->snakeX[0]--; break;
+	case 'r': if (game->snakeX[0] == BOARD_WIDTH - 1) { wait(3 * 1000); finish(game); } if (game->snakeX[0] < BOARD_WIDTH - 1) game->snakeX[0]++; break;
 	case 's': break;
 	default: break;
 	}
+	for (i = 0; i < game->obstacle; i++)
+	{
+		if (game->snakeX[0] == game->obstacleX[i] && game->snakeY[0] == game->obstacleY[i])
+		{
+			wait(3 * 1000);
+			finish(game);
+			break;
+		}
+	}
+
 	drawBoard(game);
-	Sleep(SPEED);
+
+	wait(game->speed);
 }
 
 void finish(game)
 {
 	clearScreen();
 	drawFinish(game);
-	getKey();
+	saveScore(game);
 	displayMenu(game);
 	menuControl(game);
+}
+
+int random(int min, int max)
+{
+	int tmp;
+	if (max >= min)
+		max -= min;
+	else
+	{
+		tmp = min - max;
+		min = max;
+		max = tmp;
+	}
+	return max ? (rand() % max + min) : min;
+}
+
+void saveScore(Game *game)
+{
+	FILE *score_file;
+	score_file = fopen("score.sc", "ab");
+	fprintf(score_file, "%d - %s\n", game->snakeLength-1, game->nick);
+	fclose(score_file);
+
 }

@@ -11,3 +11,4 @@ void putStringXY(int x, int y, char *string);
 char getKey();
 void clearScreen();
 void color(int bgColor, int fgColor);
+void wait(int f);
