@@ -3,7 +3,7 @@
 #include "display.h"
 #include "config.h"
 #include "console.h"
-
+// silnik gry
 
 void menuControl(Game *game);
 void engine(Game *game);

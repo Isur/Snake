@@ -7,21 +7,21 @@
 
 typedef struct
 {
-    int menuSelectX;
+    int menuSelectX;	// kursor menu
     int menuSelectY;
-    int appleX;
+    int appleX;			// pozycja jablka
     int appleY;
-    int snakeX[BOARD_HEIGHT*BOARD_WIDTH];
+    int snakeX[BOARD_HEIGHT*BOARD_WIDTH];	// pozycje snake'a
     int snakeY[BOARD_HEIGHT*BOARD_WIDTH];
-    int snakeLength;
-	int snakePrevX;
-	int snakePrevY;
-	int speed;
-	int obstacle;
-	int obstacleX[(BOARD_HEIGHT*BOARD_WIDTH) / 4];
+    int snakeLength;	// dlugosc snake'a
+	int snakePrevX;		//ostatnia pozycja
+	int snakePrevY;	
+	int speed;			// szybkosc
+	int obstacle;		// ilosc przeszkod
+	int obstacleX[(BOARD_HEIGHT*BOARD_WIDTH) / 4];	// pozycje przeszkod
 	int obstacleY[(BOARD_HEIGHT*BOARD_WIDTH) / 4];
-	char nick[11];
-	int apple;
+	char nick[11];	// nick
+	int apple;		// czy dojrzale czy nie
 }Game;
 
 void displayMenu(Game *game);

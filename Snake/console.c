@@ -3,18 +3,18 @@
 
 void prepareScreen()
 {
-	HANDLE wHnd;    // Handle to write to the console.
-	HANDLE rHnd;    // Handle to read from the console.
-    CONSOLE_CURSOR_INFO cci;
+	HANDLE wHnd;   // uchwyt
+	HANDLE rHnd;    
+    CONSOLE_CURSOR_INFO cci;		// ustawienie kursora
     cci.dwSize = 1;
     cci.bVisible = 0;
 	wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
 	rHnd = GetStdHandle(STD_INPUT_HANDLE);
 	SetConsoleCursorInfo(wHnd, &cci);
-    system("chcp 852");
-    system("CLS");
-	SetConsoleTitle(TEXT("SNAKE"));
-	SMALL_RECT windowSize = { 0, 0, BOARD_WIDTH+25, BOARD_HEIGHT };
+    system("chcp 852");	// kodowanie cp852 dla planszy
+    system("CLS");		
+	SetConsoleTitle(TEXT("SNAKE"));	// tytul
+	SMALL_RECT windowSize = { 0, 0, BOARD_WIDTH+25, BOARD_HEIGHT };	// ustawienia okna
 	SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
 	COORD bufferSize = { BOARD_WIDTH+26, BOARD_HEIGHT+1 };
 	SetConsoleScreenBufferSize(wHnd, bufferSize);
@@ -59,7 +59,7 @@ void color(int bgColor, int fgColor)
 {
 	HANDLE hand;
 	hand = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hand, bgColor * 16 | fgColor);
+	SetConsoleTextAttribute(hand, bgColor * 16 | fgColor); // ustawienie kolorów,  background | foreground
 }
 
 void wait(int f)

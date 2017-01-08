@@ -7,7 +7,7 @@
 #define UPPER_WALL 0xDF
 #define SIDE_WALL 0xDB
 
-#define UNRIPE_APPLE 0xDB //0xB1
+#define UNRIPE_APPLE 0xDB 
 #define RIP_APPLE 0xDB 
 #define BACKGROUND 0xB2
 #define SNAKE_BODY 0xDB

@@ -35,12 +35,12 @@ void displayMenuSelectIcon(Game *game)
 		game->menuSelectX = MENU_X - 2;
 		game->menuSelectY = MENU_START;
 	}
-	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);	// po przesunieciu w poprzednie miejsce wstawia spacje
+	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);	// po przesunieciu wstawia spacje
 	for (i; i <= MENU_END; i++)
 	{
 		putCharXY(MENU_X - 2, i, SPACE);
 	}
-	color(DEFAULT_BACKGROUND_COLOR, MENU_POINTER_COLOR);	// wstawianie nowego
+	color(DEFAULT_BACKGROUND_COLOR, MENU_POINTER_COLOR);	// wstawianie nowy 'kursor'
 	putCharXY(game->menuSelectX, game->menuSelectY, MENU_ARROW);
 	color(DEFAULT_BACKGROUND_COLOR, BACKGROUND_COLOR);
 }
@@ -90,8 +90,8 @@ void newGame(Game *game) // tworzenie nowej planszy
 				game->obstacleX[i] = random(1, BOARD_WIDTH - 1);										// pominiecie sprawdzania czy sie powtarzaja
 				game->obstacleY[i] = random(1, BOARD_HEIGHT - 1);										// celowe, aby zapewnic odrobine losowosci
 			} while (game->obstacleX[i] == BOARD_WIDTH / 2 && game->obstacleY[i] == BOARD_HEIGHT / 2);	// przy ilosci wyswietlonych przeszkod
-			putCharXY(game->obstacleX[i], game->obstacleY[i], SIDE_WALL);
-		}
+			putCharXY(game->obstacleX[i], game->obstacleY[i], SIDE_WALL);								// sprawdza tylko, czy nie pojawia sie na pozycji
+		}																								// poczatkowej gracza
 	}
 	
 	game->snakeX[0] = BOARD_WIDTH / 2;	//ustalenie pozycji snake'a na srodku
@@ -104,7 +104,8 @@ void newGame(Game *game) // tworzenie nowej planszy
 	putStringXY(BOARD_WIDTH + 2, 4, "q - quit");
 	putStringXY(BOARD_WIDTH + 2, 5, "r - restart");
 	putStringXY(BOARD_WIDTH + 2, 6, "wsad - move");
-	putStringXY(BOARD_WIDTH + 2, 13, "Eat apple.");
+	putStringXY(BOARD_WIDTH + 2, 12, "Eat apple but olny red.");
+	putStringXY(BOARD_WIDTH + 2, 13, "If apple is blue, wait.");
 	putStringXY(BOARD_WIDTH + 2, 14, "Be bigger.");
 	putStringXY(BOARD_WIDTH + 2, 15, "Don't hit wall.");
 	putStringXY(BOARD_WIDTH + 2, 16, "Don't hit yourself.");
@@ -124,7 +125,7 @@ void drawBoard(Game *game) // odswiezenie po kazdym ruchu
 	putCharXY(game->snakeX[0], game->snakeY[0], SNAKE_BODY); // rysowanie glowy
 	color(BACKGROUND_COLOR, BODY_COLOR);
 	if (game->snakeLength > 1)putCharXY(game->snakeX[game->snakeLength-1], game->snakeY[game->snakeLength-1], SNAKE_BODY); // rysowanie konca
-
+	// nie trzeba rysowac reszty ciala, poniewaz juz jest
 	
 }
 
@@ -134,10 +135,10 @@ void drawApple(Game *game)
 	int i = 0;
 	int error = 0;
 	do	
-	{
+	{	//losowanie pozycji
 		game->appleX = random(1, BOARD_WIDTH - 1);
 		game->appleY = random(1, BOARD_HEIGHT - 1);
-		game->apple = random(0, 2);
+		game->apple = random(0, 2);	// losowanie czy jablko 'dojrzale' czy nie
 		// sprawdza czy nie nie pojawia sie na snake'u 
 		for (i = 0; i < game->snakeLength; i++)
 		{
@@ -162,7 +163,7 @@ void drawApple(Game *game)
 		}
 	} while (error == 1);
 	
-	if (game->apple == 0)
+	if (game->apple == 0) // kolor w zaleznosci czy 'dojrzale' czy nie
 	{
 		color(BACKGROUND_COLOR, UNRIPE_APPLE_COLOR);
 	}else
@@ -170,10 +171,10 @@ void drawApple(Game *game)
 	putCharXY(game->appleX, game->appleY, UNRIPE_APPLE);
 	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);
 	putCharXY(BOARD_WIDTH + 15, 2, ' ');
-	printf("%d", game->snakeLength-1);
+	printf("%d", game->snakeLength-1); // wyswietlanie punktow
 }
 
-void ripeningApple(Game *game)
+void ripeningApple(Game *game) // dojrzewanie jablka
 {
 	game->apple = 1;
 	color(BACKGROUND_COLOR, APPLE_COLOR);
@@ -190,25 +191,24 @@ void drawFinish(Game *game)
 	putStringXY((BOARD_WIDTH + 25) / 2 -5 , BOARD_HEIGHT / 2 + 3, "YOUR SCORE:");
 	putCharXY((BOARD_WIDTH + 25) / 2 - 4, BOARD_HEIGHT / 2 + 4, SPACE);
 	printf("%d POINTS", game->snakeLength - 1);
-	for (i = 2; i > 0; i--)
+	for (i = 9; i > 0; i--) // ekran znika po czasie
 	{
 		putCharXY((BOARD_WIDTH + 25) / 2 , BOARD_HEIGHT / 2 - 4, i+48);
 		wait(1 * 1000);
 	}
 }
 
-void displayScore(Game *game)
+void displayScore(Game *game)	// ekran wynikow
 {
 	int i = BOARD_WIDTH/2+7, j = 11, k = 1;
 	char temp;
-	char tempArray[2][6];
 	color(DEFAULT_BACKGROUND_COLOR, DEFAULT_FOREGROUND_COLOR);
 	clearScreen();
 	FILE *scoreList;
 	scoreList = fopen("score.sc", "rb");
-	if(scoreList == NULL) putStringXY((BOARD_WIDTH + 25) / 2 - 5, BOARD_HEIGHT / 2 + 3, "FAILED TO OPEN FILE:");
+	if(scoreList == NULL) putStringXY((BOARD_WIDTH + 25) / 2 - 15, BOARD_HEIGHT / 2 + 3, "NO SAVE FILE. YOU NEED TO PLAY!:");
 	else
-	{
+	{	// wyswietla 7 wynikow, a klikniecie klawisza przechodzi do nastepnej strony z kolejnymi 7 wynikami
 		while (1)
 		{
 			temp = getc(scoreList);
@@ -231,10 +231,11 @@ void displayScore(Game *game)
 		
 		}
 		fclose(scoreList);
-		putStringXY(26, BOARD_HEIGHT - 3, "LAST PAGE - CLICK - BACK TO MENU!");
-		getKey();
-		displayMenu(game);
-		menuControl(game);
+		putStringXY(26, BOARD_HEIGHT - 3, "LAST PAGE - CLICK - BACK TO MENU!"); // informacja o ostatniej stronie
+	
 		
 	}
+	getKey();
+	displayMenu(game);
+	menuControl(game);
 }

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// windows console functions:
+// Windows:
 
 void prepareScreen();
 void putCharXY(int x, int y, char character);
