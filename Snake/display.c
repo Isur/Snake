@@ -104,8 +104,8 @@ void newGame(Game *game) // tworzenie nowej planszy
 	putStringXY(BOARD_WIDTH + 2, 4, "q - quit");
 	putStringXY(BOARD_WIDTH + 2, 5, "r - restart");
 	putStringXY(BOARD_WIDTH + 2, 6, "wsad - move");
-	putStringXY(BOARD_WIDTH + 2, 12, "Eat apple but olny red.");
-	putStringXY(BOARD_WIDTH + 2, 13, "If apple is blue, wait.");
+	putStringXY(BOARD_WIDTH + 2, 12, "Eat red apple.");
+	putStringXY(BOARD_WIDTH + 2, 13, "Don't eat blue.");
 	putStringXY(BOARD_WIDTH + 2, 14, "Be bigger.");
 	putStringXY(BOARD_WIDTH + 2, 15, "Don't hit wall.");
 	putStringXY(BOARD_WIDTH + 2, 16, "Don't hit yourself.");
@@ -194,7 +194,12 @@ void drawFinish(Game *game)
 	for (i = 9; i > 0; i--) // ekran znika po czasie
 	{
 		putCharXY((BOARD_WIDTH + 25) / 2 , BOARD_HEIGHT / 2 - 4, i+48);
+		if (kbhit())
+		{
+			getKey();
+		}
 		wait(1 * 1000);
+
 	}
 }
 

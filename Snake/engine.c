@@ -2,8 +2,8 @@
 
 void menuControl(Game *game) // sterowanie menu
 {
-	char key;
-	int speed = 0;
+	char key, temp;
+	int speed = 0, i = 0;
 	while (1)
 	{
 		key = getKey();
@@ -57,8 +57,22 @@ void menuControl(Game *game) // sterowanie menu
 				default: break;
 				}
 				putStringXY(MENU_X, MENU_END + 3, "NICK[max 10 chars]: ");
-				fgets(game->nick, 11, stdin);
-				game->nick[strlen(game->nick) - 1] = '\0';
+				//fgets(game->nick, 11, stdin);
+				//game->nick[strlen(game->nick) - 1] = '\0';
+				i = 0;
+				while(i < 10)
+				{
+					temp = getKey();
+					if (temp == ENTER)break;
+					printf("%c", temp);
+					game->nick[i] = temp;
+					i++;
+				}
+				game->nick[i] = '\0';
+				if (i == 10)
+				{
+					while (getKey() != ENTER) ;
+				}
 				wait(1000); 
 				engine(game);
 				break;
